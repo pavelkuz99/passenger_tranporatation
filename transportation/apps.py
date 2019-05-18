@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class TransportapiConfig(AppConfig):
+class TransportationConfig(AppConfig):
     name = 'transportation'
