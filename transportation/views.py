@@ -1,5 +1,6 @@
-from transportation.models import Route, Ride, Driver, Vehicle
-from transportation.serializers import RouteSerializer, RideSerializer, DriverSerializer, VehicleSerializer
+from transportation.models import Route, Ride, Driver, Vehicle, Client, ClientOrder
+from transportation.serializers import RouteSerializer, RideSerializer, DriverSerializer, VehicleSerializer, \
+    ClientSerializer, ClientOrderSerializer
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -57,6 +58,32 @@ class VehicleDetail(generics.RetrieveUpdateDestroyAPIView):
     name = 'vehicle-detail'
 
 
+# CLIENT
+class ClientList(generics.ListCreateAPIView):
+    queryset = Client.objects.all()
+    serializer_class = ClientSerializer
+    name = 'client-list'
+
+
+class ClientDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Client.objects.all()
+    serializer_class = ClientSerializer
+    name = 'client-detail'
+
+
+# CLIENT_ORDERS
+class ClientOrderList(generics.ListCreateAPIView):
+    queryset = ClientOrder.objects.all()
+    serializer_class = ClientOrderSerializer
+    name = 'clientorder-list'
+
+
+class ClientOrderDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ClientOrder.objects.all()
+    serializer_class = ClientOrderSerializer
+    name = 'clientorder-detail'
+
+
 class ApiRoot(generics.GenericAPIView):
     name = 'api-root'
 
@@ -65,5 +92,6 @@ class ApiRoot(generics.GenericAPIView):
             'routes': reverse(RouteList.name, request=request),
             'rides': reverse(RideList.name, request=request),
             'drivers': reverse(DriverList.name, request=request),
-            # 'users': reverse(UserList.name, request=request),
+            'vehicles': reverse(VehicleList.name, request=request),
+            'clients': reverse(VehicleList.name, request=request),
         })

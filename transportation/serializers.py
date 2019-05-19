@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from transportation.models import Route, Ride, Driver, Vehicle # ClientRide, Client
+from transportation.models import Route, Ride, Driver, \
+    Vehicle, Client, ClientOrder
 import transportation.views
 
 
@@ -33,7 +34,7 @@ class DriverSerializer(serializers.HyperlinkedModelSerializer):
             'url',
             'pk',
             'name',
-            'phone',
+            'driver_phone',
             'rating',
             'rides'
         )
@@ -60,7 +61,7 @@ class VehicleSerializer(serializers.HyperlinkedModelSerializer):
 
 class RideSerializer(serializers.HyperlinkedModelSerializer):
     route = serializers.SlugRelatedField(queryset=Route.objects.all(), slug_field='start_end')
-    driver = serializers.SlugRelatedField(queryset=Driver.objects.all(), slug_field='phone')
+    driver = serializers.SlugRelatedField(queryset=Driver.objects.all(), slug_field='driver_phone')
     vehicle = serializers.SlugRelatedField(queryset=Vehicle.objects.all(), slug_field='car_license')
 
     class Meta:
@@ -72,38 +73,54 @@ class RideSerializer(serializers.HyperlinkedModelSerializer):
             'date_and_time',
             'driver',
             'vehicle',
-            # 'clients'
+            'orders',
+        )
+        read_only_fields = (
+            'orders',
+        )
+        extra_kwargs = {
+            'orders': {'many': True}
+        }
+
+
+class OrderSerializer(serializers.HyperlinkedModelSerializer):
+    ride = RideSerializer()
+
+    class Meta:
+        model = ClientOrder
+        fields = (
+            'url',
+            'pk',
+            'ride'
         )
 
-# # ok
 
-#
-#
-# # ok
+class ClientSerializer(serializers.ModelSerializer):
+    orders = OrderSerializer(many=True, read_only=True)
 
-#
-#
-# # ok
-# class ClientSerializer(serializers.HyperlinkedModelSerializer):
-#     rides = serializers.HyperlinkedRelatedField(
-#         many=True,
-#         read_only=True,
-#         view_name='ride-detail'
-#     )
-#
-#     class Meta:
-#         model = Client
-#         fields = (
-#             'url',
-#             'pk',
-#             'name',
-#             'phone',
-#             'status',
-#             'rides'
-#         )
+    class Meta:
+        model = Client
+        fields = (
+            'url',
+            'pk',
+            'name',
+            'phone',
+            'status',
+            'orders'
+        )
 
 
+class ClientOrderSerializer(serializers.ModelSerializer):
+    client = serializers.SlugRelatedField(queryset=Client.objects.all(),
+                                          slug_field='id')
+    ride = serializers.SlugRelatedField(queryset=Ride.objects.all(),
+                                        slug_field='id')
 
-
-
-
+    class Meta:
+        model = ClientOrder
+        fields = (
+            'url',
+            'pk',
+            'client',
+            'ride'
+        )

@@ -1,7 +1,6 @@
 from django.conf.urls import url
 from transportation import views
 
-
 urlpatterns = [
     url(r'^routes/$',
         views.RouteList.as_view(),
@@ -27,20 +26,19 @@ urlpatterns = [
     url(r'^vehicles/(?P<pk>[0-9]+)/$',
         views.VehicleDetail.as_view(),
         name=views.VehicleDetail.name),
-    # url(r'^player-scores/$',
-    #     views.PlayerScoreList.as_view(),
-    #     name=views.PlayerScoreList.name),
-    # url(r'^player-scores/(?P<pk>[0-9]+)/$',
-    #     views.PlayerScoreDetail.as_view(),
-    #     name=views.PlayerScoreDetail.name),
-    # url(r'^$',
-    #     views.ApiRoot.as_view(),
-    #     name=views.ApiRoot.name),
-    # url(r'^users/$',
-    #     views.UserList.as_view(),
-    #     name=views.UserList.name),
-    # url(r'^users/(?P<pk>[0-9]+)/$',
-    #     views.UserDetail.as_view(),
-    #     name=views.UserDetail.name),
-
+    url(r'^clients/$',
+        views.ClientList.as_view(),
+        name=views.ClientList.name),
+    url(r'^clients/(?P<pk>[0-9]+)/$',
+        views.ClientDetail.as_view(),
+        name=views.ClientDetail.name),
+    url(r'^client-orders/$',
+        views.ClientOrderList.as_view(),
+        name=views.ClientOrderList.name),
+    url(r'^client-orders/(?P<pk>[0-9]+)/$',
+        views.ClientOrderDetail.as_view(),
+        name=views.ClientOrderDetail.name),
+    url(r'^$',
+        views.ApiRoot.as_view(),
+        name=views.ApiRoot.name),
 ]
