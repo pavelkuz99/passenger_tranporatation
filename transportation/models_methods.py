@@ -7,36 +7,65 @@ class ApiError(Exception):
         super(ApiError, self).__init__(message)
 
 
+class GeneralMethods:
+    @staticmethod
+    def create(model_type, info: json):
+        response = requests.post(f'http://localhost:8000/{model_type}s/', json=info)
+        if response.status_code != 201:
+            raise ApiError(f'POST /{model_type}s/ {response.status_code}')
+
+    @staticmethod
+    def read_one(model_type, model_id: int):
+        response = requests.get(f'http://localhost:8000/{model_type}s/{model_id}/')
+        if response.status_code != 200:
+            raise ApiError(f'GET /{model_type}s/{model_id}/ {response.status_code}')
+        return response.json()
+
+    @staticmethod
+    def read_all(model_type):
+        response = requests.get(f'http://localhost:8000/{model_type}s/')
+        if response.status_code != 200:
+            raise ApiError(f'GET /{model_type}s/ {response.status_code}')
+        return response.json()
+
+    @staticmethod
+    def update(model_type, model_id: int, info: json):
+        response = requests.put(f'http://localhost:8000/{model_type}s/{model_id}/', json=info)
+        if response.status_code != 200:
+            raise ApiError(f'GET /{model_type}s/{model_id}/ {response.status_code}')
+
+    @staticmethod
+    def delete(model_type, model_id: int):
+        response = requests.delete(f'http://localhost:8000/{model_type}s/{model_id}/')
+        if response.status_code != 204:
+            raise ApiError(f'GET /{model_type}s/{model_id}/ {response.status_code}')
+
+
 class ClientMethods:
     @staticmethod
     def create(name: str, phone: str):
-        info = {"name": name, "phone": phone}
-        response = requests.post('http://localhost:8000/clients/', json=info)
-        if response.status_code != 201:
-            raise ApiError(f'POST /clients/ {response.status_code}')
+        data = {"name": name, "phone": phone}
+        GeneralMethods.create('client', data)
 
     @staticmethod
-    def read_one(client_id: int):
-        response = requests.get(f'http://localhost:8000/clients/{client_id}/')
-        if response.status_code != 200:
-            raise ApiError(f'GET /clients/{client_id}/ {response.status_code}')
-        info = response.json()
-        print(f'{info["name"]}: {info["phone"]}: {info["status"]}')
+    def read_one(model_id):
+        data = GeneralMethods.read_one('client', model_id)
+        print(f'{data["name"]}: {data["phone"]}: {data["status"]}')
 
     @staticmethod
     def read_all():
-        response = requests.get(f'http://localhost:8000/clients/')
-        if response.status_code != 200:
-            raise ApiError(f'GET /clients/ {response.status_code}')
-        for info in response.json():
-            print(f'{info["name"]}: {info["phone"]}: {info["status"]}')
+        data = GeneralMethods.read_all('client')
+        for item in data:
+            print(f'{item["name"]}: {item["phone"]}: {item["status"]}')
 
     @staticmethod
-    def update(client_id: int, field_to_update: str, new_info) -> (int, json):
-        info = {field_to_update: new_info}
-        response = requests.put(f'http://localhost:8000/clients/{client_id}/', json=info)
-        if response.status_code != 200:
-            raise ApiError(f'GET /clients/{client_id}/ {response.status_code}')
+    def update(model_id, field_to_update: str, new_info):
+        data = {field_to_update: new_info}
+        GeneralMethods.update('client', model_id, data)
+
+    @staticmethod
+    def delete(model_id):
+        GeneralMethods.delete('client', model_id)
 
 
 
