@@ -1,5 +1,6 @@
 import json
 import requests
+from datetime import datetime
 
 
 class ApiError(Exception):
@@ -50,13 +51,13 @@ class ClientMethods:
     @staticmethod
     def read_one(model_id):
         data = GeneralMethods.read_one('client', model_id)
-        print(f'{data["name"]}: {data["phone"]}: {data["status"]}')
+        print(f'{data["name"]} : {data["phone"]} : {data["status"]}')
 
     @staticmethod
     def read_all():
         data = GeneralMethods.read_all('client')
         for item in data:
-            print(f'{item["name"]}: {item["phone"]}: {item["status"]}')
+            print(f'{item["name"]} : {item["phone"]} : {item["status"]}')
 
     @staticmethod
     def update(model_id, field_to_update: str, new_info):
@@ -68,65 +69,109 @@ class ClientMethods:
         GeneralMethods.delete('client', model_id)
 
 
+class RouteMethods:
+    @staticmethod
+    def create(route: str, distance: int):
+        data = {"start_end": route, "distance": distance}
+        GeneralMethods.create('route', data)
 
-#
-#
-# class RouteActions:
-#
-#
-# class RideActions:
-#
-#
-# class DriverActions:
-#
-#
-# class VehicleActions
-#
-#
-#
-#     class Person:
-#
-#
-#     class Manager(Person):
-#         def __init__(self, id_number: int, name: str, phone: str, level: int):
-#             super().__init__(id_number, name, phone)
-#             self.level = level
-#
-#     class Driver(Person):
-#         def __init__(self, id_number: int, name: str, phone: str):
-#             super().__init__(id_number, name, phone)
-#             self.rating = 0.0
-#             self.workload = []
-#             self.status = ''
-#
-#     class Passenger(Person):
-#         def __init__(self, id_number: int, name: str, phone: str):
-#             super().__init__(id_number, name, phone)
-#             self.rating = ''
-#             self.rides_list = []
-#             self.status = ''
-#
-#     class Transport:
-#         def __init__(self, model: str, color: str, capacity: int, license_number: str):
-#             self.model = model
-#             self.color = color
-#             self.capacity = capacity
-#             self.license_number = license_number
-#
-#     class Route:
-#         def __init__(self, start_point: str, end_point: str, duration: int, distance: int):
-#             self.start_point = start_point
-#             self.end_point = end_point
-#             self.stops_list = []
-#             self.duration = duration
-#             self.distance = distance
-#
-#     class Ride(Route):
-#         def __init__(self, start_point: str, end_point: str, ride_date: date, ride_time: time, duration: int,
-#                      distance: int, car: Transport, driver: Driver):
-#             super().__init__(start_point, end_point, duration, distance)
-#             self.ride_date = ride_date
-#             self.ride_time = ride_time
-#             self.car = car
-#
-#     self.driver = driver
+    @staticmethod
+    def read_one(model_id):
+        data = GeneralMethods.read_one('route', model_id)
+        print(f'{data["start_end"]} : {data["distance"]}')
+
+    @staticmethod
+    def read_all():
+        data = GeneralMethods.read_all('route')
+        for item in data:
+            print(f'{item["start_end"]} : {item["distance"]}')
+
+    @staticmethod
+    def update(model_id, field_to_update: str, new_info):
+        data = {field_to_update: new_info}
+        GeneralMethods.update('route', model_id, data)
+
+    @staticmethod
+    def delete(model_id):
+        GeneralMethods.delete('route', model_id)
+
+
+class VehicleMethods:
+    @staticmethod
+    def create(car_model: str, color: str, car_license: str):
+        data = {"car_model": car_model, "color": color, "car_license": car_license}
+        GeneralMethods.create('vehicle', data)
+
+    @staticmethod
+    def read_one(model_id):
+        data = GeneralMethods.read_one('vehicle', model_id)
+        print(f'{data["car_model"]} : {data["color"]} : {data["car_license"]}')
+
+    @staticmethod
+    def read_all():
+        data = GeneralMethods.read_all('vehicle')
+        for item in data:
+            print(f'{item["car_model"]} : {item["color"]} : {item["car_license"]}')
+
+    @staticmethod
+    def update(model_id, field_to_update: str, new_info):
+        data = {field_to_update: new_info}
+        GeneralMethods.update('vehicle', model_id, data)
+
+    @staticmethod
+    def delete(model_id):
+        GeneralMethods.delete('vehicle', model_id)
+
+
+class DriverMethods:
+    @staticmethod
+    def create(name: str, phone: str):
+        data = {"name": name, "phone": phone}
+        GeneralMethods.create('driver', data)
+
+    @staticmethod
+    def read_one(model_id):
+        data = GeneralMethods.read_one('driver', model_id)
+        print(f'{data["name"]} : {data["phone"]} : {data["rating"]}')
+
+    @staticmethod
+    def read_all():
+        data = GeneralMethods.read_all('driver')
+        for item in data:
+            print(f'{item["name"]} : {item["phone"]} : {item["rating"]}')
+
+    @staticmethod
+    def update(model_id, field_to_update: str, new_info):
+        data = {field_to_update: new_info}
+        GeneralMethods.update('driver', model_id, data)
+
+    @staticmethod
+    def delete(model_id):
+        GeneralMethods.delete('driver', model_id)
+
+
+class RideMethods:
+    @staticmethod
+    def create(route: str, date_and_time, driver: str, vehicle: str):
+        data = {"route": route, "date_and_time": date_and_time, "driver": driver, "vehicle": vehicle}
+        GeneralMethods.create('ride', data)
+
+    @staticmethod
+    def read_one(model_id):
+        data = GeneralMethods.read_one('ride', model_id)
+        print(f'{data["route"]} : {data["date_and_time"]} : {data["driver"]} : {data["vehicle"]}')
+
+    @staticmethod
+    def read_all():
+        data = GeneralMethods.read_all('ride')
+        for item in data:
+            print(f'{item["route"]} : {item["date_and_time"]} : {item["driver"]} : {item["vehicle"]}')
+
+    @staticmethod
+    def update(model_id, field_to_update: str, new_info):
+        data = {field_to_update: new_info}
+        GeneralMethods.update('ride', model_id, data)
+
+    @staticmethod
+    def delete(model_id):
+        GeneralMethods.delete('ride', model_id)
